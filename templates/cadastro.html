@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>SafeVault - Item do Cofre</title>
+    <style>
+        :root {
+            --bg-dark: #0a0a0a;
+            --bg-panel: #1a1a1a;
+            --yellow-safe: #FFC107;
+            --yellow-hover: #ffca28;
+            --text-light: #ffffff;
+            --border-color: #333333;
+        }
+
+        body { 
+            background-color: var(--bg-dark); 
+            color: var(--text-light); 
+            font-family: 'Segoe UI', Tahoma, sans-serif; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            margin: 0; 
+        }
+
+        .form-box { 
+            background-color: var(--bg-panel); 
+            padding: 40px; 
+            border-radius: 8px; 
+            border: 1px solid var(--border-color); 
+            border-top: 4px solid var(--yellow-safe); 
+            width: 400px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+        }
+
+        h2 { margin-top: 0; text-align: center; }
+        label { font-size: 14px; color: #9e9e9e; display: block; margin-top: 15px; }
+
+        input[type="text"] { 
+            width: 100%; 
+            padding: 10px; 
+            margin-top: 5px; 
+            border-radius: 5px; 
+            border: 1px solid var(--border-color); 
+            background-color: var(--bg-dark); 
+            color: white; 
+            box-sizing: border-box; 
+        }
+
+        input[type="text"]:focus { outline: none; border-color: var(--yellow-safe); }
+
+        .config-gerador { 
+            background-color: var(--bg-dark); 
+            padding: 15px; 
+            border-radius: 5px; 
+            margin: 20px 0; 
+            border: 1px solid var(--border-color); 
+        }
+
+        .btn-gerar { 
+            background-color: transparent; 
+            color: var(--yellow-safe); 
+            border: 1px solid var(--yellow-safe); 
+            padding: 8px; 
+            width: 100%; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            margin-top: 10px; 
+            transition: 0.2s; 
+        }
+
+        .btn-gerar:hover { background-color: rgba(255, 193, 7, 0.1); }
+
+        .btn-salvar { 
+            background-color: var(--yellow-safe); 
+            color: var(--bg-dark); 
+            width: 100%; 
+            padding: 12px; 
+            font-weight: bold; 
+            border: none; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            font-size: 16px; 
+            transition: 0.2s; 
+            margin-top: 10px; 
+        }
+
+        .btn-salvar:hover { background-color: var(--yellow-hover); }
+
+        .link-cancelar { 
+            display: block; 
+            text-align: center; 
+            color: #9e9e9e; 
+            text-decoration: none; 
+            margin-top: 15px; 
+            font-size: 14px; 
+            transition: 0.2s;
+        }
+
+        .link-cancelar:hover { color: white; }
+    </style>
+</head>
+<body>
+
+<div class="form-box">
+    <h2>{% if credencial %}Editar Item{% else %}Novo Item{% endif %}</h2>
+    
+    <form action="/cadastro" method="POST">
+        <input type="hidden" name="is_edit" value="{% if credencial %}true{% else %}false{% endif %}">
+        
+        <label>Serviço ou Site</label>
+        <input type="text" name="servico" value="{{ credencial.servico if credencial else '' }}" {% if credencial %}readonly style="opacity: 0.6; cursor: not-allowed;"{% endif %} required>
+        
+        <label>Usuário / E-mail</label>
+        <input type="text" name="usuario" value="{{ credencial.usuario if credencial else '' }}" required>
+        
+        <label>Senha</label>
+        <input type="text" id="campo_senha" name="senha" value="{{ credencial.senha if credencial else '' }}" required>
+        
+        <div class="config-gerador">
+            <div style="display: flex; justify-content: space-between; font-size: 13px; color: #9e9e9e;">
+                <span>Tamanho: <span id="tamanho_valor" style="color: white; font-weight: bold;">16</span></span>
+                <label style="margin: 0; display: inline;"><input type="checkbox" id="especiais" checked> Usar Símbolos (!@*)</label>
+            </div>
+            
+            <input type="range" id="tamanho" min="8" max="32" value="16" oninput="document.getElementById('tamanho_valor').innerText = this.value" style="width: 100%; margin: 10px 0;">
+            
+            <button type="button" class="btn-gerar" onclick="gerarSenha()">🎲 Gerar Senha Forte</button>
+        </div>
+
+        <button type="submit" class="btn-salvar">Salvar no Cofre</button>
+        <a href="/cofre" class="link-cancelar">Cancelar</a>
+    </form>
+</div>
+
+<script>
+    function gerarSenha() {
+        const tamanho = document.getElementById('tamanho').value;
+        const especiais = document.getElementById('especiais').checked;
+        
+        fetch(`/api/gerar_senha?tamanho=${tamanho}&especiais=${especiais}`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('campo_senha').value = data.senha;
+            });
+    }
+</script>
+
+</body>
+</html>

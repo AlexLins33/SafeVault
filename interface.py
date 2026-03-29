@@ -13,12 +13,12 @@ class AppSafeVault(ctk.CTk):
         self.title("SafeVault Pro")
         self.geometry("750x650")
         
-        # Inicialização de variáveis essenciais
+      
         self.chave = gerar_ou_carregar_chave()
         self.codigo_gerado = None
         self.job_inatividade = None 
 
-        # Configuração de segurança e inatividade
+      
         self.bind_all("<Any-KeyPress>", self.resetar_cronometro_inatividade)
         self.bind_all("<Any-Button>", self.resetar_cronometro_inatividade)
         

@@ -62,7 +62,7 @@ def sair():
     session.clear()
     return redirect(url_for('login'))
 
-# --- NOVAS ROTAS (CRUD E GERADOR) ---
+
 
 @app.route('/cadastro', methods=['GET', 'POST'])
 def cadastro():

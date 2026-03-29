@@ -32,7 +32,7 @@ def gerar_senha_forte(tamanho=12, usar_especiais=True):
     
     while True:
         senha = ''.join(secrets.choice(caracteres) for _ in range(tamanho))
-        # Validação: Pelo menos 1 maiúscula, 1 minúscula e 2 números
+      
         if (any(c.islower() for c in senha) 
             and any(c.isupper() for c in senha) 
             and sum(c.isdigit() for c in senha) >= 2):

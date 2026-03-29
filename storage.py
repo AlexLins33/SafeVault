@@ -1,10 +1,10 @@
 import sqlite3
 
 def conectar():
-    # Cria o arquivo safevault.db e conecta a ele
+ 
     conn = sqlite3.connect("safevault.db")
     cursor = conn.cursor()
-    # Cria a tabela se ela não existir
+   
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS credenciais (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -50,7 +50,7 @@ def excluir_no_db(servico):
 def atualizar_no_db(servico, novo_usuario, nova_senha_protegida):
     conn = conectar()
     cursor = conn.cursor()
-    # Atualiza o usuário e a senha onde o serviço for igual ao selecionado
+  
     cursor.execute("""
         UPDATE credenciais 
         SET usuario = ?, senha = ? 

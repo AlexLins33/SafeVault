@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SafeVault - Cofre</title>
     <style>
-        /* A mesma paleta de cores e estilos do LastPass */
+       
         :root {
             --bg-dark: #0a0a0a;
             --bg-panel: #1a1a1a;
@@ -98,10 +98,10 @@
         let clipboardTimer;
 
         function copiarSenhaSegura(senha, botao) {
-            // 1. Copia o texto (isso o navegador permite, pois ocorre no exato momento do clique)
+       
             navigator.clipboard.writeText(senha).then(() => {
                 
-                // 2. Efeito visual do botão
+               
                 const textoOriginal = botao.innerText;
                 botao.innerText = "✓ Copiado";
                 botao.style.backgroundColor = "#27ae60"; 
@@ -117,9 +117,9 @@
 
                 if (clipboardTimer) clearTimeout(clipboardTimer);
 
-                // 3. O Temporizador modificado
+               
                 clipboardTimer = setTimeout(() => {
-                    // Em vez de usar o navegador, pedimos ao Python para limpar o sistema!
+                  
                     fetch('/api/limpar_clipboard', {
                         method: 'POST',
                         headers: {

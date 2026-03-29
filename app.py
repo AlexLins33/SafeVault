@@ -3,14 +3,14 @@ import os
 import string
 import secrets
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
-# Certifique-se de que a importação inclui proteger_senha!
+
 from crypto_utils import gerar_ou_carregar_chave, revelar_senha, proteger_senha 
 
 app = Flask(__name__)
 app.secret_key = 'chave_secreta_super_segura_do_safevault' 
 chave = gerar_ou_carregar_chave()
 
-# --- LÓGICA DO GERADOR DE SENHAS ---
+-
 def gerar_senha_forte(tamanho=12, usar_especiais=True):
     caracteres = string.ascii_letters + string.digits
     simbolos = "!@*-_"
@@ -23,7 +23,7 @@ def gerar_senha_forte(tamanho=12, usar_especiais=True):
                 continue
             return senha
 
-# --- ROTAS DE LOGIN E COFRE (As que já tínhamos) ---
+
 @app.route('/', methods=['GET', 'POST'])
 def login():
     erro = None
@@ -74,7 +74,7 @@ def cadastro():
         senha_limpa = request.form.get('senha')
         is_edit = request.form.get('is_edit') == 'true'
         
-        # Criptografa a nova senha antes de salvar
+       
         senha_cripto = proteger_senha(senha_limpa, chave).decode('utf-8')
         
         conexao = sqlite3.connect('safevault.db')
@@ -87,9 +87,9 @@ def cadastro():
             
         conexao.commit()
         conexao.close()
-        return redirect(url_for('cofre')) # Volta para a lista
+        return redirect(url_for('cofre'))
         
-    # Se for GET, verifica se estamos a tentar Editar um serviço existente
+
     servico_edit = request.args.get('servico')
     credencial = None
     if servico_edit:
@@ -120,24 +120,22 @@ def api_gerar_senha():
     tamanho = int(request.args.get('tamanho', 12))
     especiais = request.args.get('especiais', 'true') == 'true'
     senha = gerar_senha_forte(tamanho, especiais)
-    return jsonify({'senha': senha}) # Envia a senha em formato JSON para o navegador ler
+    return jsonify({'senha': senha}) 
 
-# Não se esqueça de adicionar esta importação lá no topo do arquivo!
+
 import pyperclip 
-from flask import jsonify # Adicione o jsonify nas importações do flask lá em cima também
+from flask import jsonify 
 
-# ... (resto do seu código) ...
+
 
 @app.route('/api/limpar_clipboard', methods=['POST'])
 def limpar_clipboard():
-    # O JavaScript vai enviar a senha que foi copiada
+   
     dados = request.get_json()
     senha_copiada = dados.get('senha')
     
     try:
-        # Só limpa se a senha que está atualmente na área de transferência 
-        # for a mesma que o usuário copiou há 30s. Isso evita apagar algo 
-        # importante que ele tenha copiado de outro lugar nesse meio tempo!
+    
         if pyperclip.paste() == senha_copiada:
             pyperclip.copy(" ") 
             return jsonify({"status": "limpo"})

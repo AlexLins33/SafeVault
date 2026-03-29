@@ -9,7 +9,7 @@ def gerenciar_acesso(chave_cripto):
     if not os.path.exists(arquivo_senha):
         print("\n=== CONFIGURAÇÃO DE PRIMEIRO ACESSO ===")
         nova_senha = input("Defina sua SENHA MESTRA para proteger o cofre: ")
-        # Criptografamos a senha mestra para segurança extra
+     
         p_mestra = proteger_senha(nova_senha, chave_cripto)
         with open(arquivo_senha, "wb") as f:
             f.write(p_mestra)
@@ -32,7 +32,7 @@ def gerenciar_acesso(chave_cripto):
 def iniciar():
     chave = gerar_ou_carregar_chave()
     
-    # Bloqueio de segurança inicial
+ 
     if not gerenciar_acesso(chave):
         return
 
@@ -62,7 +62,7 @@ def iniciar():
             else:
                 print("\n--- CREDENCIAIS SALVAS ---")
                 for item in lista:
-                    # Precisamos converter o texto do JSON de volta para bytes para descriptografar
+                
                     real = revelar_senha(item['senha'].encode(), chave)
                     print(f"Site: {item['servico']} | User: {item['usuario']} | Senha: {real}")
 
